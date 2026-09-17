@@ -232,3 +232,5 @@ logs/
 
 # GTFS static data
 data/static/
+# Generated ML model files
+models/*.joblib
