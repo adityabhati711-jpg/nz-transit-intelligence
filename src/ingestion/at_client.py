@@ -7,6 +7,8 @@ from src.config import AT_HEADERS
 BASE_URL = "https://api.at.govt.nz/realtime/legacy"
 
 TRIP_UPDATES_URL = f"{BASE_URL}/tripupdates"
+VEHICLE_POSITIONS_URL = f"{BASE_URL}/vehiclelocations"
+ALERTS_URL = f"{BASE_URL}/servicealerts"
 
 
 @retry(
@@ -15,8 +17,6 @@ TRIP_UPDATES_URL = f"{BASE_URL}/tripupdates"
     reraise=True,
 )
 def fetch_trip_updates():
-    """Fetch live Auckland Transport trip updates."""
-
     response = requests.get(
         TRIP_UPDATES_URL,
         headers=AT_HEADERS,
@@ -24,33 +24,56 @@ def fetch_trip_updates():
     )
 
     response.raise_for_status()
+    return response.json()
 
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=8),
+    reraise=True,
+)
+def fetch_vehicle_positions():
+    response = requests.get(
+        VEHICLE_POSITIONS_URL,
+        headers=AT_HEADERS,
+        timeout=20,
+    )
+
+    response.raise_for_status()
+    return response.json()
+
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=2, max=8),
+    reraise=True,
+)
+def fetch_service_alerts():
+    response = requests.get(
+        ALERTS_URL,
+        headers=AT_HEADERS,
+        timeout=20,
+    )
+
+    response.raise_for_status()
     return response.json()
 
 
 if __name__ == "__main__":
-    data = fetch_trip_updates()
+    trip_data = fetch_trip_updates()
+    vehicle_data = fetch_vehicle_positions()
+    alert_data = fetch_service_alerts()
 
-    # Some AT responses wrap the GTFS feed inside "response".
-    feed = data.get("response", data)
+    trip_feed = trip_data.get("response", trip_data)
+    vehicle_feed = vehicle_data.get("response", vehicle_data)
+    alert_feed = alert_data.get("response", alert_data)
 
-    header = feed.get("header", {})
-    entities = feed.get("entity", [])
+    trip_entities = trip_feed.get("entity", [])
+    vehicle_entities = vehicle_feed.get("entity", [])
+    alert_entities = alert_feed.get("entity", [])
 
-    print("LIVE AT REQUEST SUCCESSFUL")
-    print("--------------------------")
-    print("Feed timestamp:", header.get("timestamp"))
-    print("Entities received:", len(entities))
-
-    if entities:
-        first_entity = entities[0]
-
-        trip_update = first_entity.get("trip_update", {})
-        trip = trip_update.get("trip", {})
-        vehicle = trip_update.get("vehicle", {})
-
-        print("\nSample live record")
-        print("------------------")
-        print("Trip ID:", trip.get("trip_id"))
-        print("Route ID:", trip.get("route_id"))
-        print("Vehicle ID:", vehicle.get("id"))
+    print("AUCKLAND TRANSPORT LIVE API TEST")
+    print("--------------------------------")
+    print("Trip updates:", len(trip_entities))
+    print("Vehicle positions:", len(vehicle_entities))
+    print("Service alerts:", len(alert_entities))
