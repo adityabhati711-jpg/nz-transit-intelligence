@@ -228,3 +228,7 @@ data/raw/
 
 # Logs
 logs/
+
+
+# GTFS static data
+data/static/
