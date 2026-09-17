@@ -216,3 +216,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local secrets
+.env
+
+# Virtual environment
+.venv/
+
+# Generated/local data
+data/raw/
+
+# Logs
+logs/
