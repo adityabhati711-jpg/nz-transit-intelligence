@@ -873,6 +873,10 @@ st.caption(
     "and transit analytics"
 )
 
+st.info(
+    "⏳ First load may take up to 1 minute while the free-tier API wakes up."
+)
+
 
 # ============================================================
 # API HEALTH
