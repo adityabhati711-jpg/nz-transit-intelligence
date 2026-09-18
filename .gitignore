@@ -234,3 +234,6 @@ logs/
 data/static/
 # Generated ML model files
 models/*.joblib
+
+# Keep final production model
+!models/final_delay_model.joblib
