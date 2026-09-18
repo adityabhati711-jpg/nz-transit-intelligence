@@ -1,9 +1,14 @@
+import os
 import requests
 import streamlit as st
 import plotly.graph_objects as go
 
+API_URL = os.getenv(
+    "API_URL",
+    "https://nz-transit-intelligence.onrender.com",
+)
 
-API_URL = "http://127.0.0.1:8000"
+API_TIMEOUT = 90 
 
 
 # ============================================================
@@ -26,7 +31,7 @@ def get_routes():
 
     response = requests.get(
         f"{API_URL}/gtfs/routes",
-        timeout=10,
+        timeout=API_TIMEOUT,
     )
 
     response.raise_for_status()
@@ -45,7 +50,7 @@ def get_route_stops(
         params={
             "direction_id": direction_id,
         },
-        timeout=20,
+        timeout=API_TIMEOUT,
     )
 
     response.raise_for_status()
@@ -75,7 +80,7 @@ def get_network_kpis():
 
     response = requests.get(
         f"{API_URL}/analytics/network-kpis",
-        timeout=10,
+        timeout=API_TIMEOUT,
     )
 
     response.raise_for_status()
@@ -88,7 +93,7 @@ def get_time_period_performance():
 
     response = requests.get(
         f"{API_URL}/analytics/time-period-performance",
-        timeout=10,
+        timeout=API_TIMEOUT,
     )
 
     response.raise_for_status()
@@ -105,7 +110,7 @@ def get_top_delayed_routes():
             "limit": 10,
             "min_observations": 10,
         },
-        timeout=10,
+        timeout=API_TIMEOUT,
     )
 
     response.raise_for_status()
@@ -122,7 +127,7 @@ def get_problem_stops():
             "limit": 50,
             "min_observations": 5,
         },
-        timeout=10,
+        timeout=API_TIMEOUT,
     )
 
     response.raise_for_status()
@@ -879,7 +884,7 @@ try:
 
     health_response = requests.get(
         f"{API_URL}/health",
-        timeout=5,
+        timeout=API_TIMEOUT,
     )
 
     if (
@@ -1134,7 +1139,7 @@ if st.button(
         response = requests.post(
             f"{API_URL}/predict-delay",
             json=payload,
-            timeout=15,
+            timeout=API_TIMEOUT,
         )
 
         if (
@@ -1868,7 +1873,7 @@ if api_connected:
 
         model_response = requests.get(
             f"{API_URL}/model-info",
-            timeout=5,
+            timeout=API_TIMEOUT,
         )
 
         if (
