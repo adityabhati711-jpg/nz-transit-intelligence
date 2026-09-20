@@ -8,6 +8,7 @@ from zoneinfo import ZoneInfo
 import plotly.graph_objects as go
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
 from plotly.subplots import make_subplots
 
 
@@ -132,14 +133,27 @@ st.html(
         color: var(--slate-950);
     }}
 
-    /* Hide Streamlit chrome for a cleaner portfolio surface */
+    /* ========================================================
+       INTEGRATED TOP HEADER
+       Native sidebar arrow + brand + native clickable nav + API
+       ======================================================== */
+
     [data-testid="stHeader"] {{
-        background: transparent;
-        height: 0;
+        height: 78px !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        pointer-events: none;
     }}
 
     [data-testid="stToolbar"] {{
-        display: none;
+        display: flex !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+    }}
+
+    [data-testid="stDeployButton"],
+    [data-testid="stMainMenu"] {{
+        display: none !important;
     }}
 
     #MainMenu {{
@@ -152,28 +166,27 @@ st.html(
 
     .block-container {{
         max-width: 1680px;
-        padding-top: 6.6rem;
+        padding-top: 6.3rem;
         padding-bottom: 1.5rem;
         padding-left: 1.35rem;
         padding-right: 1.35rem;
     }}
 
-    /* --------------------------------------------------------
-       FIXED FULL-WIDTH TOP BAR
-       -------------------------------------------------------- */
-
     .premium-topbar {{
         position: fixed;
-        z-index: 99999;
         top: 0;
         left: 0;
         right: 0;
-        height: 76px;
+        z-index: 999990;
+        height: 78px;
+
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 1.2rem;
-        padding: 0 1.45rem;
+
+        padding: 0 1.45rem 0 4.85rem;
+
         background:
             radial-gradient(
                 circle at 65% -80%,
@@ -183,11 +196,12 @@ st.html(
             linear-gradient(
                 90deg,
                 #0a1a31 0%,
-                #102b4d 52%,
+                #173f70 53%,
                 #0a1a31 100%
             );
+
         border-bottom: 1px solid rgba(255,255,255,.08);
-        box-shadow: 0 12px 34px rgba(3,12,24,.20);
+        box-shadow: 0 12px 30px rgba(3,12,24,.18);
     }}
 
     .premium-brand {{
@@ -229,41 +243,6 @@ st.html(
         margin-top: .26rem;
     }}
 
-    .premium-nav {{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: .18rem;
-        flex: 1;
-    }}
-
-    .premium-nav a {{
-        color: #dce8f5 !important;
-        text-decoration: none;
-        font-size: .73rem;
-        font-weight: 720;
-        padding: .62rem .82rem;
-        border-radius: 11px;
-        transition: .18s ease;
-    }}
-
-    .premium-nav a:hover {{
-        color: #ffffff !important;
-        background: rgba(255,255,255,.10);
-    }}
-
-    .premium-nav .active {{
-        color: #ffffff !important;
-        background:
-            linear-gradient(
-                135deg,
-                rgba(55,145,255,.95),
-                rgba(37,99,235,.95)
-            );
-        box-shadow:
-            0 9px 20px rgba(37,99,235,.28);
-    }}
-
     .topbar-right {{
         min-width: 315px;
         display: flex;
@@ -280,7 +259,7 @@ st.html(
         border-radius: 999px;
         border: 1px solid rgba(112,241,175,.22);
         background: rgba(16,185,129,.10);
-        color: #6ee7b7;
+        color: #6ee7b7 !important;
         font-size: .7rem;
         font-weight: 800;
         white-space: nowrap;
@@ -297,7 +276,7 @@ st.html(
     .api-pill.offline {{
         border-color: rgba(251,113,133,.25);
         background: rgba(239,68,68,.10);
-        color: #fda4af;
+        color: #fda4af !important;
     }}
 
     .api-pill.offline .api-dot {{
@@ -308,21 +287,271 @@ st.html(
     .clock-wrap {{
         padding-left: .78rem;
         border-left: 1px solid rgba(255,255,255,.13);
-        color: #e6edf6;
+        color: #e6edf6 !important;
         line-height: 1.25;
         text-align: left;
     }}
 
     .clock-date {{
-        color: #aebfd4;
+        color: #aebfd4 !important;
         font-size: .63rem;
     }}
 
     .clock-time {{
-        color: #ffffff;
+        color: #ffffff !important;
         font-size: .78rem;
         font-weight: 800;
         margin-top: .12rem;
+    }}
+
+    /* Always-visible proxy menu button iframe.
+       It stays beside the bus logo even after the sidebar is collapsed. */
+    div[data-testid="stIFrame"] {{
+        position: fixed !important;
+        top: 17px !important;
+        left: 14px !important;
+        z-index: 1000010 !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        overflow: visible !important;
+    }}
+
+    div[data-testid="stIFrame"] iframe {{
+        width: 42px !important;
+        height: 42px !important;
+        border: 0 !important;
+        background: transparent !important;
+    }}
+
+    /* Hide Streamlit's own hover-only collapse icon.
+       The real button stays in the DOM and the proxy activates it. */
+    [data-testid="stSidebarCollapseButton"] {{
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }}
+
+    .st-key-dashboard_nav {{
+        position: fixed !important;
+        top: 17px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+
+        z-index: 1000004 !important;
+
+        width: max-content !important;
+        max-width: 46vw !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+    }}
+
+    .st-key-dashboard_nav::-webkit-scrollbar {{
+        display: none !important;
+    }}
+
+    .st-key-dashboard_nav [data-testid="stSegmentedControl"] {{
+        margin: 0 !important;
+        width: max-content !important;
+        min-width: max-content !important;
+    }}
+
+    .st-key-dashboard_nav [data-testid="stSegmentedControl"] > div {{
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+
+        width: max-content !important;
+        min-width: max-content !important;
+
+        gap: .2rem !important;
+        padding: 0 !important;
+
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }}
+
+    .st-key-dashboard_nav [data-testid="stSegmentedControl"] button {{
+        flex: 0 0 auto !important;
+
+        min-height: 44px !important;
+        height: 44px !important;
+
+        padding: 0 .95rem !important;
+
+        border: 1px solid transparent !important;
+        border-radius: 13px !important;
+
+        color: #f5f8fc !important;
+        background: transparent !important;
+
+        font-size: .74rem !important;
+        font-weight: 780 !important;
+        white-space: nowrap !important;
+    }}
+
+    .st-key-dashboard_nav [data-testid="stSegmentedControl"] button:hover {{
+        color: #ffffff !important;
+        background: rgba(255,255,255,.09) !important;
+    }}
+
+    .st-key-dashboard_nav [data-testid="stSegmentedControl"] button[aria-pressed="true"],
+    .st-key-dashboard_nav [data-testid="stSegmentedControl"] button[data-selected="true"] {{
+        color: #ffffff !important;
+        background:
+            linear-gradient(
+                135deg,
+                #3d96ff,
+                #2874ed
+            ) !important;
+        border-color: rgba(255,255,255,.12) !important;
+        box-shadow:
+            0 8px 18px rgba(37,99,235,.30) !important;
+    }}
+
+    @media (max-width: 1050px) {{
+        .premium-brand,
+        .topbar-right {{
+            min-width: auto;
+        }}
+
+        .premium-brand-sub {{
+            display: none;
+        }}
+
+        .clock-wrap {{
+            display: none;
+        }}
+
+        .st-key-dashboard_nav {{
+            max-width: 42vw !important;
+        }}
+
+        .st-key-dashboard_nav [data-testid="stSegmentedControl"] button {{
+            padding: 0 .68rem !important;
+            font-size: .68rem !important;
+        }}
+
+        .hero-kpis {{
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+        }}
+
+        .network-strip {{
+            grid-template-columns:
+                repeat(4, minmax(0,1fr));
+            row-gap: .7rem;
+        }}
+
+        .model-grid {{
+            grid-template-columns:
+                repeat(3, minmax(0,1fr));
+        }}
+    }}
+
+    @media (max-width: 760px) {{
+        [data-testid="stHeader"] {{
+            height: 118px !important;
+        }}
+
+        .premium-topbar {{
+            height: 118px;
+            align-items: flex-start;
+            padding:
+                .72rem .7rem
+                3.35rem 4.25rem;
+        }}
+
+        .premium-brand-mark {{
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            font-size: 1.35rem;
+        }}
+
+        .premium-brand-title {{
+            font-size: .98rem;
+        }}
+
+        .premium-brand-sub,
+        .clock-wrap {{
+            display: none;
+        }}
+
+        .topbar-right {{
+            margin-left: auto;
+        }}
+
+        .api-pill {{
+            padding: .42rem .58rem;
+            font-size: .64rem;
+        }}
+
+        div[data-testid="stIFrame"] {{
+            top: 15px !important;
+            left: 10px !important;
+            width: 38px !important;
+            min-width: 38px !important;
+            height: 38px !important;
+            min-height: 38px !important;
+        }}
+
+        div[data-testid="stIFrame"] iframe {{
+            width: 38px !important;
+            height: 38px !important;
+        }}
+
+        .st-key-dashboard_nav {{
+            top: 70px !important;
+            left: .72rem !important;
+            right: .72rem !important;
+            transform: none !important;
+            width: auto !important;
+            max-width: none !important;
+        }}
+
+        .st-key-dashboard_nav [data-testid="stSegmentedControl"] button {{
+            min-height: 36px !important;
+            height: 36px !important;
+            padding: 0 .66rem !important;
+            font-size: .64rem !important;
+        }}
+
+        .block-container {{
+            padding-top: 8.6rem;
+            padding-left: .8rem;
+            padding-right: .8rem;
+        }}
+
+        [data-testid="stSidebar"] > div {{
+            padding-top: 1rem;
+        }}
+
+        .hero {{
+            min-height: auto;
+            padding: 1.25rem 1rem;
+        }}
+
+        .hero-kpis {{
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+        }}
+
+        .network-strip {{
+            grid-template-columns:
+                repeat(2, minmax(0,1fr));
+        }}
     }}
 
     /* --------------------------------------------------------
@@ -330,6 +559,9 @@ st.html(
        -------------------------------------------------------- */
 
     [data-testid="stSidebar"] {{
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
         background:
             radial-gradient(
                 circle at 0% 0%,
@@ -347,7 +579,7 @@ st.html(
     }}
 
     [data-testid="stSidebar"] > div {{
-        padding-top: 6.4rem;
+        padding-top: 1.15rem;
         padding-left: 1rem;
         padding-right: 1rem;
     }}
@@ -941,10 +1173,6 @@ st.html(
     }}
 
     @media (max-width: 1050px) {{
-        .premium-nav {{
-            display: none;
-        }}
-
         .premium-brand,
         .topbar-right {{
             min-width: auto;
@@ -969,8 +1197,8 @@ st.html(
 
     @media (max-width: 760px) {{
         .premium-topbar {{
-            height: 70px;
-            padding: 0 .8rem;
+            min-height: 70px;
+            padding: .65rem .8rem;
         }}
 
         .premium-brand-title {{
@@ -986,13 +1214,13 @@ st.html(
         }}
 
         .block-container {{
-            padding-top: 5.9rem;
+            padding-top: 4rem;
             padding-left: .8rem;
             padding-right: .8rem;
         }}
 
         [data-testid="stSidebar"] > div {{
-            padding-top: 5.8rem;
+            padding-top: 1rem;
         }}
 
         .hero {{
@@ -2038,7 +2266,7 @@ except Exception:
 
 
 # ============================================================
-# FIXED TOP BAR
+# PREMIUM TOP BAR + REAL CLICKABLE NAVIGATION
 # ============================================================
 
 api_class = (
@@ -2072,28 +2300,6 @@ st.html(
             </div>
         </div>
 
-        <div class="premium-nav">
-            <a class="active" href="#home">
-                ⌂&nbsp; Home
-            </a>
-
-            <a href="#analytics">
-                Analytics
-            </a>
-
-            <a href="#prediction">
-                Prediction
-            </a>
-
-            <a href="#network">
-                Network
-            </a>
-
-            <a href="#about">
-                About
-            </a>
-        </div>
-
         <div class="topbar-right">
             <div class="{api_class}">
                 <span class="api-dot"></span>
@@ -2112,6 +2318,212 @@ st.html(
         </div>
     </div>
     """
+)
+
+nav_choice = st.segmented_control(
+    "Dashboard navigation",
+    options=[
+        "Home",
+        "Analytics",
+        "Prediction",
+        "Network",
+        "About",
+    ],
+    default="Home",
+    selection_mode="single",
+    label_visibility="collapsed",
+    key="dashboard_nav",
+)
+
+if nav_choice is None:
+    nav_choice = "Home"
+
+
+# ============================================================
+# ALWAYS-VISIBLE SIDEBAR TOGGLE
+# ============================================================
+
+components.html(
+    """
+    <!doctype html>
+    <html>
+    <head>
+        <style>
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                width: 42px;
+                height: 42px;
+                overflow: hidden;
+                background: transparent;
+            }
+
+            #sidebar-toggle {
+                width: 42px;
+                height: 42px;
+
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                padding: 0;
+
+                border: 1px solid rgba(255,255,255,.18);
+                border-radius: 11px;
+
+                background:
+                    linear-gradient(
+                        145deg,
+                        #183b63,
+                        #102b4d
+                    );
+
+                color: #ffffff;
+
+                font-family:
+                    Arial,
+                    sans-serif;
+
+                font-size: 21px;
+                font-weight: 900;
+                letter-spacing: -5px;
+                line-height: 1;
+
+                cursor: pointer;
+
+                box-shadow:
+                    0 7px 18px rgba(3,12,24,.28);
+            }
+
+            #sidebar-toggle:hover {
+                background:
+                    linear-gradient(
+                        145deg,
+                        #215184,
+                        #15375e
+                    );
+            }
+
+            @media (max-width: 760px) {
+                html,
+                body,
+                #sidebar-toggle {
+                    width: 38px;
+                    height: 38px;
+                }
+
+                #sidebar-toggle {
+                    font-size: 19px;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <button
+            id="sidebar-toggle"
+            type="button"
+            title="Open or close prediction menu"
+            aria-label="Open or close prediction menu"
+        >
+            ❮❮
+        </button>
+
+        <script>
+        (() => {
+            const parentDoc = window.parent.document;
+            const button =
+                document.getElementById(
+                    "sidebar-toggle"
+                );
+
+            function getSidebar() {
+                return parentDoc.querySelector(
+                    '[data-testid="stSidebar"]'
+                );
+            }
+
+            function getNativeToggle() {
+                const wrapper =
+                    parentDoc.querySelector(
+                        '[data-testid="stSidebarCollapseButton"]'
+                    );
+
+                if (!wrapper) {
+                    return null;
+                }
+
+                return (
+                    wrapper.querySelector("button")
+                    || wrapper
+                );
+            }
+
+            function updateArrow() {
+                const sidebar =
+                    getSidebar();
+
+                const expanded =
+                    sidebar
+                    && sidebar.getAttribute(
+                        "aria-expanded"
+                    ) === "true";
+
+                button.textContent =
+                    expanded
+                    ? "❮❮"
+                    : "❯❯";
+
+                button.title =
+                    expanded
+                    ? "Close prediction menu"
+                    : "Open prediction menu";
+            }
+
+            button.addEventListener(
+                "click",
+                () => {
+                    const nativeToggle =
+                        getNativeToggle();
+
+                    if (nativeToggle) {
+                        nativeToggle.click();
+
+                        setTimeout(
+                            updateArrow,
+                            120
+                        );
+                    }
+                }
+            );
+
+            updateArrow();
+
+            const observer =
+                new MutationObserver(
+                    updateArrow
+                );
+
+            observer.observe(
+                parentDoc.body,
+                {
+                    attributes: true,
+                    childList: true,
+                    subtree: true,
+                    attributeFilter: [
+                        "aria-expanded"
+                    ]
+                }
+            );
+        })();
+        </script>
+    </body>
+    </html>
+    """,
+    width=42,
+    height=42,
+    scrolling=False,
 )
 
 
@@ -2497,437 +2909,1341 @@ if api_connected:
         model_info = {}
 
 
-# ============================================================
-# HERO
-# ============================================================
+if nav_choice == "Home":
+    # ============================================================
+    # HERO
+    # ============================================================
 
-routes_value = int(
-    network_kpis.get(
-        "routes_observed",
-        0,
+    routes_value = int(
+        network_kpis.get(
+            "routes_observed",
+            0,
+        )
+        or 0
     )
-    or 0
-)
 
-stops_value = int(
-    network_kpis.get(
-        "stops_observed",
-        0,
+    stops_value = int(
+        network_kpis.get(
+            "stops_observed",
+            0,
+        )
+        or 0
     )
-    or 0
-)
 
-trips_value = int(
-    network_kpis.get(
-        "unique_trips",
-        0,
+    trips_value = int(
+        network_kpis.get(
+            "unique_trips",
+            0,
+        )
+        or 0
     )
-    or 0
-)
 
-observations_value = int(
-    network_kpis.get(
-        "total_observations",
-        0,
+    observations_value = int(
+        network_kpis.get(
+            "total_observations",
+            0,
+        )
+        or 0
     )
-    or 0
-)
 
 
-st.html(
-    f"""
-    <div id="home"></div>
+    st.html(
+        f"""
+        <div id="home"></div>
 
-    <div class="hero">
-        <div class="hero-content">
-            <div class="hero-eyebrow">
-                Auckland public transport intelligence
-            </div>
-
-            <div class="hero-title">
-                Auckland Transport Analytics
-                &amp; Delay Prediction
-            </div>
-
-            <div class="hero-copy">
-                Real transport data, machine learning and
-                network analytics brought together in one
-                decision-support dashboard.
-            </div>
-
-            <div class="hero-kpis">
-                <div class="hero-kpi">
-                    <div class="hero-kpi-icon">
-                        🚌
-                    </div>
-
-                    <div>
-                        <div class="hero-kpi-value">
-                            {routes_value:,}
-                        </div>
-
-                        <div class="hero-kpi-label">
-                            Routes Observed
-                        </div>
-                    </div>
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-eyebrow">
+                    Auckland public transport intelligence
                 </div>
 
-                <div class="hero-kpi">
-                    <div class="hero-kpi-icon">
-                        📍
-                    </div>
-
-                    <div>
-                        <div class="hero-kpi-value">
-                            {stops_value:,}
-                        </div>
-
-                        <div class="hero-kpi-label">
-                            Stops Observed
-                        </div>
-                    </div>
+                <div class="hero-title">
+                    Auckland Transport Analytics
+                    &amp; Delay Prediction
                 </div>
 
-                <div class="hero-kpi">
-                    <div class="hero-kpi-icon">
-                        ↔
-                    </div>
-
-                    <div>
-                        <div class="hero-kpi-value">
-                            {trips_value:,}
-                        </div>
-
-                        <div class="hero-kpi-label">
-                            Unique Trips
-                        </div>
-                    </div>
+                <div class="hero-copy">
+                    Real transport data, machine learning and
+                    network analytics brought together in one
+                    decision-support dashboard.
                 </div>
 
-                <div class="hero-kpi">
-                    <div class="hero-kpi-icon">
-                        ◉
-                    </div>
-
-                    <div>
-                        <div class="hero-kpi-value">
-                            {observations_value:,}
+                <div class="hero-kpis">
+                    <div class="hero-kpi">
+                        <div class="hero-kpi-icon">
+                            🚌
                         </div>
 
-                        <div class="hero-kpi-label">
-                            Total Observations
+                        <div>
+                            <div class="hero-kpi-value">
+                                {routes_value:,}
+                            </div>
+
+                            <div class="hero-kpi-label">
+                                Routes Observed
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-kpi">
+                        <div class="hero-kpi-icon">
+                            📍
+                        </div>
+
+                        <div>
+                            <div class="hero-kpi-value">
+                                {stops_value:,}
+                            </div>
+
+                            <div class="hero-kpi-label">
+                                Stops Observed
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-kpi">
+                        <div class="hero-kpi-icon">
+                            ↔
+                        </div>
+
+                        <div>
+                            <div class="hero-kpi-value">
+                                {trips_value:,}
+                            </div>
+
+                            <div class="hero-kpi-label">
+                                Unique Trips
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-kpi">
+                        <div class="hero-kpi-icon">
+                            ◉
+                        </div>
+
+                        <div>
+                            <div class="hero-kpi-value">
+                                {observations_value:,}
+                            </div>
+
+                            <div class="hero-kpi-label">
+                                Total Observations
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="wake-note">
-        ⏳ <strong>Free-tier hosting:</strong>
-        the first visit after inactivity can take up to
-        about one minute while the API wakes up.
-    </div>
-    """
-)
+        <div class="wake-note">
+            ⏳ <strong>Free-tier hosting:</strong>
+            the first visit after inactivity can take up to
+            about one minute while the API wakes up.
+        </div>
+        """
+    )
 
 
-# ============================================================
-# PREDICTION + MODEL
-# ============================================================
 
-st.html(
-    '<div id="prediction"></div>'
-)
+if nav_choice in ("Home", "Prediction"):
+    # ============================================================
+    # PREDICTION + MODEL
+    # ============================================================
 
-prediction_column, model_column = (
-    st.columns(
+    st.html(
+        '<div id="prediction"></div>'
+    )
+
+    prediction_column, model_column = (
+        st.columns(
+            [
+                1.05,
+                1,
+            ],
+            gap="medium",
+        )
+    )
+
+
+    # ---------------- PREDICTION ----------------
+
+    with prediction_column:
+        st.html(
+            """
+            <div class="card-title">
+                ✦ &nbsp;Prediction Result
+            </div>
+
+            <div class="card-copy">
+                Machine-learning delay estimate for the
+                selected journey.
+            </div>
+            """
+        )
+
+        result = (
+            st.session_state.prediction_result
+        )
+
+        prediction_error = (
+            st.session_state.prediction_error
+        )
+
+        context = (
+            st.session_state.prediction_context
+        )
+
+        if prediction_error:
+            st.error(
+                "Prediction request failed."
+            )
+
+            with st.expander(
+                "Technical details"
+            ):
+                st.code(
+                    prediction_error
+                )
+
+        elif result:
+            probability = float(
+                result.get(
+                    "delay_probability_percent",
+                    0,
+                )
+                or 0
+            )
+
+            risk = result.get(
+                "risk_level",
+                "Unknown",
+            )
+
+            delayed = bool(
+                result.get(
+                    "delayed",
+                    False,
+                )
+            )
+
+            time_period = result.get(
+                "time_period",
+                "Unknown",
+            )
+
+            is_weekend = bool(
+                result.get(
+                    "is_weekend",
+                    False,
+                )
+            )
+
+            gauge_column, result_column = (
+                st.columns(
+                    [
+                        .78,
+                        1.22,
+                    ],
+                    gap="small",
+                )
+            )
+
+            with gauge_column:
+                st.plotly_chart(
+                    create_probability_ring(
+                        probability
+                    ),
+                    width="stretch",
+                    config={
+                        "displayModeBar":
+                            False,
+                    },
+                )
+
+            with result_column:
+                risk_class = (
+                    "red"
+                    if str(
+                        risk
+                    ).lower() in {
+                        "high",
+                        "very high",
+                    }
+                    else "amber"
+                )
+
+                prediction_class = (
+                    "red"
+                    if delayed
+                    else "green"
+                )
+
+                selected_time = (
+                    f"{int(context['hour']):02d}:00"
+                    if context
+                    else (
+                        f"{int(local_hour):02d}:00"
+                    )
+                )
+
+                st.html(
+                    f"""
+                    <div class="result-box {risk_class}">
+                        <div class="result-label">
+                            Risk Level
+                        </div>
+
+                        <div class="result-value">
+                            {safe(risk)}
+                        </div>
+                    </div>
+
+                    <div class="result-box {prediction_class}">
+                        <div class="result-label">
+                            Prediction
+                        </div>
+
+                        <div class="result-value">
+                            {
+                                "Delayed"
+                                if delayed
+                                else "Not Delayed"
+                            }
+                        </div>
+                    </div>
+
+                    <div class="result-box blue">
+                        <div class="result-label">
+                            Selected Time
+                        </div>
+
+                        <div class="result-value">
+                            {safe(selected_time)}
+                            ({safe(time_period)})
+                        </div>
+                    </div>
+                    """
+                )
+
+            if delayed:
+                st.error(
+                    "⚠️ This journey is predicted to be delayed."
+                )
+            else:
+                st.success(
+                    "✓ This journey is currently predicted as not delayed."
+                )
+
+            if context:
+                with st.expander(
+                    "Journey summary"
+                ):
+                    summary_1, summary_2 = (
+                        st.columns(2)
+                    )
+
+                    summary_1.write(
+                        f"**Route:** "
+                        f"{context['route']}"
+                    )
+
+                    summary_1.write(
+                        f"**Stop:** "
+                        f"{context['stop']}"
+                    )
+
+                    summary_1.write(
+                        f"**Stop sequence:** "
+                        f"{context['stop_sequence']}"
+                    )
+
+                    summary_2.write(
+                        f"**Direction:** "
+                        f"{context['direction']}"
+                    )
+
+                    summary_2.write(
+                        f"**Journey time:** "
+                        f"{context['hour']:02d}:00"
+                    )
+
+                    summary_2.write(
+                        f"**Day:** "
+                        f"{context['day']}"
+                    )
+
+                    summary_2.write(
+                        f"**Weekend:** "
+                        f"{'Yes' if is_weekend else 'No'}"
+                    )
+
+        else:
+            st.html(
+                """
+                <div style="
+                    min-height:250px;
+                    display:flex;
+                    flex-direction:column;
+                    align-items:center;
+                    justify-content:center;
+                    text-align:center;
+                    border:1px dashed #cbd5e1;
+                    border-radius:15px;
+                    background:#fbfdff;
+                    padding:1.2rem;
+                ">
+                    <div style="
+                        width:54px;
+                        height:54px;
+                        display:grid;
+                        place-items:center;
+                        border-radius:16px;
+                        background:#eaf2ff;
+                        font-size:1.35rem;
+                        margin-bottom:.65rem;
+                    ">
+                        ✦
+                    </div>
+
+                    <div style="
+                        color:#0f172a;
+                        font-size:.96rem;
+                        font-weight:850;
+                    ">
+                        Ready for a prediction
+                    </div>
+
+                    <div style="
+                        color:#64748b;
+                        font-size:.7rem;
+                        line-height:1.5;
+                        max-width:340px;
+                        margin-top:.22rem;
+                    ">
+                        Choose route, direction, stop, hour
+                        and day in the left panel, then click
+                        Predict Delay.
+                    </div>
+                </div>
+                """
+            )
+
+
+    # ---------------- MODEL INFO ----------------
+
+    with model_column:
+        st.html(
+            '<div id="about"></div>'
+        )
+
+        if model_info:
+            model_name = (
+                model_info.get(
+                    "model",
+                    "Unknown",
+                )
+            )
+
+            accuracy = float(
+                model_info.get(
+                    "accuracy",
+                    0,
+                )
+                or 0
+            )
+
+            roc_auc = float(
+                model_info.get(
+                    "roc_auc",
+                    0,
+                )
+                or 0
+            )
+
+            pr_auc = float(
+                model_info.get(
+                    "pr_auc",
+                    0,
+                )
+                or 0
+            )
+
+            precision = float(
+                model_info.get(
+                    "precision",
+                    0,
+                )
+                or 0
+            )
+
+            recall = float(
+                model_info.get(
+                    "recall",
+                    0,
+                )
+                or 0
+            )
+
+            f1 = float(
+                model_info.get(
+                    "f1",
+                    0,
+                )
+                or 0
+            )
+
+            st.html(
+                f"""
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:.8rem;
+                ">
+                    <div>
+                        <div class="card-title">
+                            ⚙ &nbsp;Model Information
+                        </div>
+
+                        <div class="card-copy">
+                            Transparent evaluation metrics for
+                            the deployed classifier.
+                        </div>
+                    </div>
+
+                    <div class="model-pill">
+                        {safe(model_name)}
+                    </div>
+                </div>
+
+                <div class="model-grid">
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {accuracy * 100:.2f}%
+                        </div>
+
+                        <div class="model-label">
+                            Accuracy
+                        </div>
+                    </div>
+
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {roc_auc:.3f}
+                        </div>
+
+                        <div class="model-label">
+                            ROC AUC
+                        </div>
+                    </div>
+
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {pr_auc:.3f}
+                        </div>
+
+                        <div class="model-label">
+                            PR AUC
+                        </div>
+                    </div>
+
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {precision:.3f}
+                        </div>
+
+                        <div class="model-label">
+                            Precision
+                        </div>
+                    </div>
+
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {recall:.3f}
+                        </div>
+
+                        <div class="model-label">
+                            Recall
+                        </div>
+                    </div>
+
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {f1:.3f}
+                        </div>
+
+                        <div class="model-label">
+                            F1 Score
+                        </div>
+                    </div>
+                </div>
+
+                <div class="model-note">
+                    <strong>
+                        How to read this
+                    </strong>
+                    <br>
+                    The model estimates delay likelihood from
+                    journey features. Accuracy is shown with
+                    precision, recall, F1, ROC AUC and PR AUC
+                    because delayed observations are an
+                    imbalanced class.
+                </div>
+                """
+            )
+
+        else:
+            st.info(
+                "Model information is currently unavailable."
+            )
+
+
+
+if nav_choice in ("Home", "Network"):
+    # ============================================================
+    # NETWORK OVERVIEW — COMPACT STRIP
+    # ============================================================
+
+    st.html(
+        '<div id="network"></div>'
+    )
+
+    section_header(
+        "Network",
+        "Network Overview",
+        (
+            "Key statistics from Auckland Transport "
+            "realtime observations."
+        ),
+    )
+
+
+    if network_kpis:
+        average_delay = float(
+            network_kpis.get(
+                "average_delay_minutes",
+                0,
+            )
+            or 0
+        )
+
+        median_delay = float(
+            network_kpis.get(
+                "median_delay_minutes",
+                0,
+            )
+            or 0
+        )
+
+        delayed_percentage = float(
+            network_kpis.get(
+                "delayed_percentage",
+                0,
+            )
+            or 0
+        )
+
+        on_time_percentage = float(
+            network_kpis.get(
+                "on_time_percentage",
+                0,
+            )
+            or 0
+        )
+
+        st.html(
+            f"""
+            <div class="network-shell">
+                <div class="network-head">
+                    <div>
+                        <div class="network-title">
+                            Network Overview
+                        </div>
+
+                        <div class="network-sub">
+                            Reliability snapshot from the
+                            current analytics dataset.
+                        </div>
+                    </div>
+
+                    <div class="data-badge">
+                        ▣ Data period: recent collection
+                    </div>
+                </div>
+
+                <div class="network-strip">
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            ◉
+                        </div>
+
+                        <div class="network-stat-value">
+                            {
+                                int(
+                                    network_kpis.get(
+                                        "total_observations",
+                                        0,
+                                    )
+                                    or 0
+                                )
+                            :,}
+                        </div>
+
+                        <div class="network-stat-label">
+                            Observations
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            ↔
+                        </div>
+
+                        <div class="network-stat-value">
+                            {
+                                int(
+                                    network_kpis.get(
+                                        "unique_trips",
+                                        0,
+                                    )
+                                    or 0
+                                )
+                            :,}
+                        </div>
+
+                        <div class="network-stat-label">
+                            Unique Trips
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            🚌
+                        </div>
+
+                        <div class="network-stat-value">
+                            {
+                                int(
+                                    network_kpis.get(
+                                        "routes_observed",
+                                        0,
+                                    )
+                                    or 0
+                                )
+                            :,}
+                        </div>
+
+                        <div class="network-stat-label">
+                            Routes
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            📍
+                        </div>
+
+                        <div class="network-stat-value">
+                            {
+                                int(
+                                    network_kpis.get(
+                                        "stops_observed",
+                                        0,
+                                    )
+                                    or 0
+                                )
+                            :,}
+                        </div>
+
+                        <div class="network-stat-label">
+                            Stops
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            ◷
+                        </div>
+
+                        <div class="network-stat-value">
+                            {average_delay:.2f} min
+                        </div>
+
+                        <div class="network-stat-label">
+                            Average Delay
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            ◴
+                        </div>
+
+                        <div class="network-stat-value">
+                            {median_delay:.2f} min
+                        </div>
+
+                        <div class="network-stat-label">
+                            Median Delay
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            ▥
+                        </div>
+
+                        <div class="network-stat-value">
+                            {delayed_percentage:.2f}%
+                        </div>
+
+                        <div class="network-stat-label">
+                            Delayed
+                        </div>
+                    </div>
+
+                    <div class="network-stat">
+                        <div class="network-stat-icon">
+                            ✓
+                        </div>
+
+                        <div class="network-stat-value">
+                            {on_time_percentage:.2f}%
+                        </div>
+
+                        <div class="network-stat-label">
+                            On Time
+                        </div>
+                    </div>
+                </div>
+            </div>
+            """
+        )
+
+    else:
+        st.warning(
+            "Network analytics could not be loaded."
+        )
+
+
+
+if nav_choice in ("Home", "Analytics"):
+    # ============================================================
+    # ANALYTICS — ROUTES + TIME PERFORMANCE
+    # ============================================================
+
+    st.html(
+        '<div id="analytics"></div>'
+    )
+
+    section_header(
+        "Analytics",
+        "Performance Intelligence",
+        (
+            "Compare route reliability and see how performance "
+            "changes across different parts of the day."
+        ),
+    )
+
+    routes_column, time_column = (
+        st.columns(
+            [
+                1,
+                1,
+            ],
+            gap="medium",
+        )
+    )
+
+
+    with routes_column:
+        st.html(
+            """
+            <div class="card-title">
+                ▥ &nbsp;Routes with Highest Delay Rate
+            </div>
+
+            <div class="card-copy">
+                Top routes ranked by delayed observations.
+            </div>
+            """
+        )
+
+        if delayed_routes:
+            st.plotly_chart(
+                create_top_routes_chart(
+                    delayed_routes
+                ),
+                width="stretch",
+                config={
+                    "displayModeBar": False,
+                },
+            )
+        else:
+            st.info(
+                "No route analytics available."
+            )
+
+
+    with time_column:
+        st.html(
+            """
+            <div class="card-title">
+                ◷ &nbsp;Performance by Time Period
+            </div>
+
+            <div class="card-copy">
+                Delay rate and average delay by time of day.
+            </div>
+            """
+        )
+
+        if time_rows:
+            st.plotly_chart(
+                create_time_performance_chart(
+                    time_rows
+                ),
+                width="stretch",
+                config={
+                    "displayModeBar": False,
+                },
+            )
+        else:
+            st.info(
+                "No time-period analytics available."
+            )
+
+
+    # ------------------------------------------------------------
+    # ROUTE + TIME DETAIL TABLES
+    # ------------------------------------------------------------
+
+    route_details_column, time_details_column = (
+        st.columns(
+            [
+                1,
+                1,
+            ]
+        )
+    )
+
+
+    with route_details_column:
+        if delayed_routes:
+            with st.expander(
+                "View route performance data"
+            ):
+                route_table = []
+
+                for row in delayed_routes:
+                    route_table.append(
+                        {
+                            "Route":
+                                full_route_label(
+                                    row
+                                ),
+
+                            "Observations":
+                                int(
+                                    row.get(
+                                        "observations",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+
+                            "Delay Observations":
+                                int(
+                                    row.get(
+                                        "delay_observations",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+
+                            "Average Delay (min)":
+                                round(
+                                    float(
+                                        row.get(
+                                            "average_delay_minutes",
+                                            0,
+                                        )
+                                        or 0
+                                    ),
+                                    2,
+                                ),
+
+                            "Delayed %":
+                                round(
+                                    float(
+                                        row.get(
+                                            "delayed_percentage",
+                                            0,
+                                        )
+                                        or 0
+                                    ),
+                                    2,
+                                ),
+
+                            "On Time %":
+                                round(
+                                    float(
+                                        row.get(
+                                            "on_time_percentage",
+                                            0,
+                                        )
+                                        or 0
+                                    ),
+                                    2,
+                                ),
+                        }
+                    )
+
+                st.dataframe(
+                    route_table,
+                    width="stretch",
+                    hide_index=True,
+                )
+
+
+    with time_details_column:
+        if time_rows:
+            with st.expander(
+                "View time-period data"
+            ):
+                time_table = []
+
+                for row in time_rows:
+                    time_table.append(
+                        {
+                            "Time Period":
+                                row.get(
+                                    "time_period"
+                                ),
+
+                            "Observations":
+                                int(
+                                    row.get(
+                                        "observations",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+
+                            "Delay Observations":
+                                int(
+                                    row.get(
+                                        "delay_observations",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+
+                            "Average Delay (min)":
+                                round(
+                                    float(
+                                        row.get(
+                                            "average_delay_minutes",
+                                            0,
+                                        )
+                                        or 0
+                                    ),
+                                    2,
+                                ),
+
+                            "Delayed %":
+                                round(
+                                    float(
+                                        row.get(
+                                            "delayed_percentage",
+                                            0,
+                                        )
+                                        or 0
+                                    ),
+                                    2,
+                                ),
+                        }
+                    )
+
+                st.dataframe(
+                    time_table,
+                    width="stretch",
+                    hide_index=True,
+                )
+
+
+    # ============================================================
+    # PROBLEM STOPS — GRAPH + MAP SIDE BY SIDE
+    # ============================================================
+
+    st.html(
+        '<div id="stops"></div>'
+    )
+
+    section_header(
+        "Hotspots",
+        "Problem Stops",
+        (
+            "Identify stops with the highest observed delay rates "
+            "and view their geographic distribution across Auckland."
+        ),
+    )
+
+    problem_chart_column, problem_map_column = (
+        st.columns(
+            [
+                1,
+                1.15,
+            ],
+            gap="medium",
+        )
+    )
+
+
+    with problem_chart_column:
+        st.html(
+            """
+            <div class="card-title">
+                ▥ &nbsp;Stops with Highest Delay Rate
+            </div>
+
+            <div class="card-copy">
+                Top problem stops ranked by delayed observation percentage.
+            </div>
+            """
+        )
+
+        if problem_stops:
+            st.plotly_chart(
+                create_problem_stops_chart(
+                    problem_stops
+                ),
+                width="stretch",
+                config={
+                    "displayModeBar": False,
+                },
+            )
+        else:
+            st.info(
+                "No problem-stop analytics available."
+            )
+
+
+    with problem_map_column:
+        st.html(
+            """
+            <div class="card-title">
+                📍 &nbsp;Geographic Delay Hotspots
+            </div>
+
+            <div class="card-copy">
+                Marker size and colour represent the observed delay rate.
+            </div>
+            """
+        )
+
+        if problem_stops:
+            try:
+                map_figure = (
+                    create_problem_stops_map(
+                        problem_stops
+                    )
+                )
+
+                if (
+                    map_figure
+                    is not None
+                ):
+                    st.plotly_chart(
+                        map_figure,
+                        width="stretch",
+                        config={
+                            "displayModeBar": False,
+                        },
+                    )
+
+                else:
+                    st.info(
+                        "No stop coordinates available."
+                    )
+
+            except Exception as error:
+                st.warning(
+                    "Problem stops map could not be displayed."
+                )
+
+                with st.expander(
+                    "Technical details"
+                ):
+                    st.code(
+                        str(error)
+                    )
+
+        else:
+            st.info(
+                "No problem-stop analytics available."
+            )
+
+
+    # ------------------------------------------------------------
+    # PROBLEM STOP DATA TABLE — RESTORED
+    # ------------------------------------------------------------
+
+    if problem_stops:
+        with st.expander(
+            "View problem stop data"
+        ):
+            stop_table = []
+
+            for row in problem_stops[:20]:
+                stop_table.append(
+                    {
+                        "Stop":
+                            row.get(
+                                "stop_name"
+                            ),
+
+                        "Observations":
+                            int(
+                                row.get(
+                                    "observations",
+                                    0,
+                                )
+                                or 0
+                            ),
+
+                        "Delay Observations":
+                            int(
+                                row.get(
+                                    "delay_observations",
+                                    0,
+                                )
+                                or 0
+                            ),
+
+                        "Average Delay (min)":
+                            round(
+                                float(
+                                    row.get(
+                                        "average_delay_minutes",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+                                2,
+                            ),
+
+                        "Maximum Delay (min)":
+                            round(
+                                float(
+                                    row.get(
+                                        "maximum_delay_minutes",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+                                2,
+                            ),
+
+                        "Delayed %":
+                            round(
+                                float(
+                                    row.get(
+                                        "delayed_percentage",
+                                        0,
+                                    )
+                                    or 0
+                                ),
+                                2,
+                            ),
+                    }
+                )
+
+            st.dataframe(
+                stop_table,
+                width="stretch",
+                hide_index=True,
+            )
+
+
+
+
+if nav_choice == "About":
+    section_header(
+        "About",
+        "About NZ Transit Intelligence",
+        (
+            "An end-to-end Auckland public transport analytics "
+            "and machine-learning decision-support project."
+        ),
+    )
+
+    about_left, about_right = st.columns(
         [
             1.05,
             1,
         ],
         gap="medium",
     )
-)
 
-
-# ---------------- PREDICTION ----------------
-
-with prediction_column:
-    st.html(
-        """
-        <div class="card-title">
-            ✦ &nbsp;Prediction Result
-        </div>
-
-        <div class="card-copy">
-            Machine-learning delay estimate for the
-            selected journey.
-        </div>
-        """
-    )
-
-    result = (
-        st.session_state.prediction_result
-    )
-
-    prediction_error = (
-        st.session_state.prediction_error
-    )
-
-    context = (
-        st.session_state.prediction_context
-    )
-
-    if prediction_error:
-        st.error(
-            "Prediction request failed."
-        )
-
-        with st.expander(
-            "Technical details"
-        ):
-            st.code(
-                prediction_error
-            )
-
-    elif result:
-        probability = float(
-            result.get(
-                "delay_probability_percent",
-                0,
-            )
-            or 0
-        )
-
-        risk = result.get(
-            "risk_level",
-            "Unknown",
-        )
-
-        delayed = bool(
-            result.get(
-                "delayed",
-                False,
-            )
-        )
-
-        time_period = result.get(
-            "time_period",
-            "Unknown",
-        )
-
-        is_weekend = bool(
-            result.get(
-                "is_weekend",
-                False,
-            )
-        )
-
-        gauge_column, result_column = (
-            st.columns(
-                [
-                    .78,
-                    1.22,
-                ],
-                gap="small",
-            )
-        )
-
-        with gauge_column:
-            st.plotly_chart(
-                create_probability_ring(
-                    probability
-                ),
-                width="stretch",
-                config={
-                    "displayModeBar":
-                        False,
-                },
-            )
-
-        with result_column:
-            risk_class = (
-                "red"
-                if str(
-                    risk
-                ).lower() in {
-                    "high",
-                    "very high",
-                }
-                else "amber"
-            )
-
-            prediction_class = (
-                "red"
-                if delayed
-                else "green"
-            )
-
-            selected_time = (
-                f"{int(context['hour']):02d}:00"
-                if context
-                else (
-                    f"{int(local_hour):02d}:00"
-                )
-            )
-
-            st.html(
-                f"""
-                <div class="result-box {risk_class}">
-                    <div class="result-label">
-                        Risk Level
-                    </div>
-
-                    <div class="result-value">
-                        {safe(risk)}
-                    </div>
-                </div>
-
-                <div class="result-box {prediction_class}">
-                    <div class="result-label">
-                        Prediction
-                    </div>
-
-                    <div class="result-value">
-                        {
-                            "Delayed"
-                            if delayed
-                            else "Not Delayed"
-                        }
-                    </div>
-                </div>
-
-                <div class="result-box blue">
-                    <div class="result-label">
-                        Selected Time
-                    </div>
-
-                    <div class="result-value">
-                        {safe(selected_time)}
-                        ({safe(time_period)})
-                    </div>
-                </div>
-                """
-            )
-
-        if delayed:
-            st.error(
-                "⚠️ This journey is predicted to be delayed."
-            )
-        else:
-            st.success(
-                "✓ This journey is currently predicted as not delayed."
-            )
-
-        if context:
-            with st.expander(
-                "Journey summary"
-            ):
-                summary_1, summary_2 = (
-                    st.columns(2)
-                )
-
-                summary_1.write(
-                    f"**Route:** "
-                    f"{context['route']}"
-                )
-
-                summary_1.write(
-                    f"**Stop:** "
-                    f"{context['stop']}"
-                )
-
-                summary_1.write(
-                    f"**Stop sequence:** "
-                    f"{context['stop_sequence']}"
-                )
-
-                summary_2.write(
-                    f"**Direction:** "
-                    f"{context['direction']}"
-                )
-
-                summary_2.write(
-                    f"**Journey time:** "
-                    f"{context['hour']:02d}:00"
-                )
-
-                summary_2.write(
-                    f"**Day:** "
-                    f"{context['day']}"
-                )
-
-                summary_2.write(
-                    f"**Weekend:** "
-                    f"{'Yes' if is_weekend else 'No'}"
-                )
-
-    else:
+    with about_left:
         st.html(
             """
-            <div style="
-                min-height:250px;
-                display:flex;
-                flex-direction:column;
-                align-items:center;
-                justify-content:center;
-                text-align:center;
-                border:1px dashed #cbd5e1;
-                border-radius:15px;
-                background:#fbfdff;
-                padding:1.2rem;
-            ">
-                <div style="
-                    width:54px;
-                    height:54px;
-                    display:grid;
-                    place-items:center;
-                    border-radius:16px;
-                    background:#eaf2ff;
-                    font-size:1.35rem;
-                    margin-bottom:.65rem;
-                ">
-                    ✦
+            <div class="premium-card">
+                <div class="card-title">
+                    Project Overview
                 </div>
 
-                <div style="
-                    color:#0f172a;
-                    font-size:.96rem;
-                    font-weight:850;
+                <div class="card-copy" style="
+                    font-size:.76rem;
+                    line-height:1.72;
+                    margin-top:.65rem;
+                    color:#475569;
                 ">
-                    Ready for a prediction
-                </div>
-
-                <div style="
-                    color:#64748b;
-                    font-size:.7rem;
-                    line-height:1.5;
-                    max-width:340px;
-                    margin-top:.22rem;
-                ">
-                    Choose route, direction, stop, hour
-                    and day in the left panel, then click
-                    Predict Delay.
+                    NZ Transit Intelligence combines Auckland Transport
+                    GTFS and realtime observations with PostgreSQL analytics,
+                    a deployed machine-learning model, FastAPI and Streamlit.
+                    It supports network reliability analysis, delay-risk
+                    prediction and geographic hotspot exploration.
                 </div>
             </div>
             """
         )
 
+    with about_right:
+        st.html(
+            """
+            <div class="premium-card">
+                <div class="card-title">
+                    Technology Stack
+                </div>
 
-# ---------------- MODEL INFO ----------------
-
-with model_column:
-    st.html(
-        '<div id="about"></div>'
-    )
+                <div class="card-copy" style="
+                    font-size:.76rem;
+                    line-height:1.82;
+                    margin-top:.65rem;
+                    color:#475569;
+                ">
+                    <strong>Data:</strong> Auckland Transport GTFS + realtime<br>
+                    <strong>Database:</strong> PostgreSQL / Neon<br>
+                    <strong>Backend:</strong> FastAPI / Render<br>
+                    <strong>Machine Learning:</strong> Logistic Regression<br>
+                    <strong>Frontend:</strong> Streamlit + Plotly<br>
+                    <strong>Deployment:</strong> Streamlit Community Cloud
+                </div>
+            </div>
+            """
+        )
 
     if model_info:
-        model_name = (
-            model_info.get(
-                "model",
-                "Unknown",
-            )
+        section_header(
+            "Model",
+            "Deployed Model Metrics",
+            (
+                "Evaluation metrics for the production "
+                "delay classifier."
+            ),
         )
 
         accuracy = float(
@@ -2980,772 +4296,66 @@ with model_column:
 
         st.html(
             f"""
-            <div style="
-                display:flex;
-                align-items:center;
-                justify-content:space-between;
-                gap:.8rem;
-            ">
-                <div>
-                    <div class="card-title">
-                        ⚙ &nbsp;Model Information
+            <div class="premium-card">
+                <div class="model-grid">
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {accuracy * 100:.2f}%
+                        </div>
+                        <div class="model-label">
+                            Accuracy
+                        </div>
                     </div>
 
-                    <div class="card-copy">
-                        Transparent evaluation metrics for
-                        the deployed classifier.
-                    </div>
-                </div>
-
-                <div class="model-pill">
-                    {safe(model_name)}
-                </div>
-            </div>
-
-            <div class="model-grid">
-                <div class="model-stat">
-                    <div class="model-value">
-                        {accuracy * 100:.2f}%
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {roc_auc:.3f}
+                        </div>
+                        <div class="model-label">
+                            ROC AUC
+                        </div>
                     </div>
 
-                    <div class="model-label">
-                        Accuracy
-                    </div>
-                </div>
-
-                <div class="model-stat">
-                    <div class="model-value">
-                        {roc_auc:.3f}
-                    </div>
-
-                    <div class="model-label">
-                        ROC AUC
-                    </div>
-                </div>
-
-                <div class="model-stat">
-                    <div class="model-value">
-                        {pr_auc:.3f}
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {pr_auc:.3f}
+                        </div>
+                        <div class="model-label">
+                            PR AUC
+                        </div>
                     </div>
 
-                    <div class="model-label">
-                        PR AUC
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {precision:.3f}
+                        </div>
+                        <div class="model-label">
+                            Precision
+                        </div>
                     </div>
-                </div>
 
-                <div class="model-stat">
-                    <div class="model-value">
-                        {precision:.3f}
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {recall:.3f}
+                        </div>
+                        <div class="model-label">
+                            Recall
+                        </div>
                     </div>
 
-                    <div class="model-label">
-                        Precision
+                    <div class="model-stat">
+                        <div class="model-value">
+                            {f1:.3f}
+                        </div>
+                        <div class="model-label">
+                            F1 Score
+                        </div>
                     </div>
                 </div>
-
-                <div class="model-stat">
-                    <div class="model-value">
-                        {recall:.3f}
-                    </div>
-
-                    <div class="model-label">
-                        Recall
-                    </div>
-                </div>
-
-                <div class="model-stat">
-                    <div class="model-value">
-                        {f1:.3f}
-                    </div>
-
-                    <div class="model-label">
-                        F1 Score
-                    </div>
-                </div>
-            </div>
-
-            <div class="model-note">
-                <strong>
-                    How to read this
-                </strong>
-                <br>
-                The model estimates delay likelihood from
-                journey features. Accuracy is shown with
-                precision, recall, F1, ROC AUC and PR AUC
-                because delayed observations are an
-                imbalanced class.
             </div>
             """
         )
 
-    else:
-        st.info(
-            "Model information is currently unavailable."
-        )
-
-
-# ============================================================
-# NETWORK OVERVIEW — COMPACT STRIP
-# ============================================================
-
-st.html(
-    '<div id="network"></div>'
-)
-
-section_header(
-    "Network",
-    "Network Overview",
-    (
-        "Key statistics from Auckland Transport "
-        "realtime observations."
-    ),
-)
-
-
-if network_kpis:
-    average_delay = float(
-        network_kpis.get(
-            "average_delay_minutes",
-            0,
-        )
-        or 0
-    )
-
-    median_delay = float(
-        network_kpis.get(
-            "median_delay_minutes",
-            0,
-        )
-        or 0
-    )
-
-    delayed_percentage = float(
-        network_kpis.get(
-            "delayed_percentage",
-            0,
-        )
-        or 0
-    )
-
-    on_time_percentage = float(
-        network_kpis.get(
-            "on_time_percentage",
-            0,
-        )
-        or 0
-    )
-
-    st.html(
-        f"""
-        <div class="network-shell">
-            <div class="network-head">
-                <div>
-                    <div class="network-title">
-                        Network Overview
-                    </div>
-
-                    <div class="network-sub">
-                        Reliability snapshot from the
-                        current analytics dataset.
-                    </div>
-                </div>
-
-                <div class="data-badge">
-                    ▣ Data period: recent collection
-                </div>
-            </div>
-
-            <div class="network-strip">
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        ◉
-                    </div>
-
-                    <div class="network-stat-value">
-                        {
-                            int(
-                                network_kpis.get(
-                                    "total_observations",
-                                    0,
-                                )
-                                or 0
-                            )
-                        :,}
-                    </div>
-
-                    <div class="network-stat-label">
-                        Observations
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        ↔
-                    </div>
-
-                    <div class="network-stat-value">
-                        {
-                            int(
-                                network_kpis.get(
-                                    "unique_trips",
-                                    0,
-                                )
-                                or 0
-                            )
-                        :,}
-                    </div>
-
-                    <div class="network-stat-label">
-                        Unique Trips
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        🚌
-                    </div>
-
-                    <div class="network-stat-value">
-                        {
-                            int(
-                                network_kpis.get(
-                                    "routes_observed",
-                                    0,
-                                )
-                                or 0
-                            )
-                        :,}
-                    </div>
-
-                    <div class="network-stat-label">
-                        Routes
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        📍
-                    </div>
-
-                    <div class="network-stat-value">
-                        {
-                            int(
-                                network_kpis.get(
-                                    "stops_observed",
-                                    0,
-                                )
-                                or 0
-                            )
-                        :,}
-                    </div>
-
-                    <div class="network-stat-label">
-                        Stops
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        ◷
-                    </div>
-
-                    <div class="network-stat-value">
-                        {average_delay:.2f} min
-                    </div>
-
-                    <div class="network-stat-label">
-                        Average Delay
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        ◴
-                    </div>
-
-                    <div class="network-stat-value">
-                        {median_delay:.2f} min
-                    </div>
-
-                    <div class="network-stat-label">
-                        Median Delay
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        ▥
-                    </div>
-
-                    <div class="network-stat-value">
-                        {delayed_percentage:.2f}%
-                    </div>
-
-                    <div class="network-stat-label">
-                        Delayed
-                    </div>
-                </div>
-
-                <div class="network-stat">
-                    <div class="network-stat-icon">
-                        ✓
-                    </div>
-
-                    <div class="network-stat-value">
-                        {on_time_percentage:.2f}%
-                    </div>
-
-                    <div class="network-stat-label">
-                        On Time
-                    </div>
-                </div>
-            </div>
-        </div>
-        """
-    )
-
-else:
-    st.warning(
-        "Network analytics could not be loaded."
-    )
-
-
-# ============================================================
-# ANALYTICS — ROUTES + TIME PERFORMANCE
-# ============================================================
-
-st.html(
-    '<div id="analytics"></div>'
-)
-
-section_header(
-    "Analytics",
-    "Performance Intelligence",
-    (
-        "Compare route reliability and see how performance "
-        "changes across different parts of the day."
-    ),
-)
-
-routes_column, time_column = (
-    st.columns(
-        [
-            1,
-            1,
-        ],
-        gap="medium",
-    )
-)
-
-
-with routes_column:
-    st.html(
-        """
-        <div class="card-title">
-            ▥ &nbsp;Routes with Highest Delay Rate
-        </div>
-
-        <div class="card-copy">
-            Top routes ranked by delayed observations.
-        </div>
-        """
-    )
-
-    if delayed_routes:
-        st.plotly_chart(
-            create_top_routes_chart(
-                delayed_routes
-            ),
-            width="stretch",
-            config={
-                "displayModeBar": False,
-            },
-        )
-    else:
-        st.info(
-            "No route analytics available."
-        )
-
-
-with time_column:
-    st.html(
-        """
-        <div class="card-title">
-            ◷ &nbsp;Performance by Time Period
-        </div>
-
-        <div class="card-copy">
-            Delay rate and average delay by time of day.
-        </div>
-        """
-    )
-
-    if time_rows:
-        st.plotly_chart(
-            create_time_performance_chart(
-                time_rows
-            ),
-            width="stretch",
-            config={
-                "displayModeBar": False,
-            },
-        )
-    else:
-        st.info(
-            "No time-period analytics available."
-        )
-
-
-# ------------------------------------------------------------
-# ROUTE + TIME DETAIL TABLES
-# ------------------------------------------------------------
-
-route_details_column, time_details_column = (
-    st.columns(
-        [
-            1,
-            1,
-        ]
-    )
-)
-
-
-with route_details_column:
-    if delayed_routes:
-        with st.expander(
-            "View route performance data"
-        ):
-            route_table = []
-
-            for row in delayed_routes:
-                route_table.append(
-                    {
-                        "Route":
-                            full_route_label(
-                                row
-                            ),
-
-                        "Observations":
-                            int(
-                                row.get(
-                                    "observations",
-                                    0,
-                                )
-                                or 0
-                            ),
-
-                        "Delay Observations":
-                            int(
-                                row.get(
-                                    "delay_observations",
-                                    0,
-                                )
-                                or 0
-                            ),
-
-                        "Average Delay (min)":
-                            round(
-                                float(
-                                    row.get(
-                                        "average_delay_minutes",
-                                        0,
-                                    )
-                                    or 0
-                                ),
-                                2,
-                            ),
-
-                        "Delayed %":
-                            round(
-                                float(
-                                    row.get(
-                                        "delayed_percentage",
-                                        0,
-                                    )
-                                    or 0
-                                ),
-                                2,
-                            ),
-
-                        "On Time %":
-                            round(
-                                float(
-                                    row.get(
-                                        "on_time_percentage",
-                                        0,
-                                    )
-                                    or 0
-                                ),
-                                2,
-                            ),
-                    }
-                )
-
-            st.dataframe(
-                route_table,
-                width="stretch",
-                hide_index=True,
-            )
-
-
-with time_details_column:
-    if time_rows:
-        with st.expander(
-            "View time-period data"
-        ):
-            time_table = []
-
-            for row in time_rows:
-                time_table.append(
-                    {
-                        "Time Period":
-                            row.get(
-                                "time_period"
-                            ),
-
-                        "Observations":
-                            int(
-                                row.get(
-                                    "observations",
-                                    0,
-                                )
-                                or 0
-                            ),
-
-                        "Delay Observations":
-                            int(
-                                row.get(
-                                    "delay_observations",
-                                    0,
-                                )
-                                or 0
-                            ),
-
-                        "Average Delay (min)":
-                            round(
-                                float(
-                                    row.get(
-                                        "average_delay_minutes",
-                                        0,
-                                    )
-                                    or 0
-                                ),
-                                2,
-                            ),
-
-                        "Delayed %":
-                            round(
-                                float(
-                                    row.get(
-                                        "delayed_percentage",
-                                        0,
-                                    )
-                                    or 0
-                                ),
-                                2,
-                            ),
-                    }
-                )
-
-            st.dataframe(
-                time_table,
-                width="stretch",
-                hide_index=True,
-            )
-
-
-# ============================================================
-# PROBLEM STOPS — GRAPH + MAP SIDE BY SIDE
-# ============================================================
-
-st.html(
-    '<div id="stops"></div>'
-)
-
-section_header(
-    "Hotspots",
-    "Problem Stops",
-    (
-        "Identify stops with the highest observed delay rates "
-        "and view their geographic distribution across Auckland."
-    ),
-)
-
-problem_chart_column, problem_map_column = (
-    st.columns(
-        [
-            1,
-            1.15,
-        ],
-        gap="medium",
-    )
-)
-
-
-with problem_chart_column:
-    st.html(
-        """
-        <div class="card-title">
-            ▥ &nbsp;Stops with Highest Delay Rate
-        </div>
-
-        <div class="card-copy">
-            Top problem stops ranked by delayed observation percentage.
-        </div>
-        """
-    )
-
-    if problem_stops:
-        st.plotly_chart(
-            create_problem_stops_chart(
-                problem_stops
-            ),
-            width="stretch",
-            config={
-                "displayModeBar": False,
-            },
-        )
-    else:
-        st.info(
-            "No problem-stop analytics available."
-        )
-
-
-with problem_map_column:
-    st.html(
-        """
-        <div class="card-title">
-            📍 &nbsp;Geographic Delay Hotspots
-        </div>
-
-        <div class="card-copy">
-            Marker size and colour represent the observed delay rate.
-        </div>
-        """
-    )
-
-    if problem_stops:
-        try:
-            map_figure = (
-                create_problem_stops_map(
-                    problem_stops
-                )
-            )
-
-            if (
-                map_figure
-                is not None
-            ):
-                st.plotly_chart(
-                    map_figure,
-                    width="stretch",
-                    config={
-                        "displayModeBar": False,
-                    },
-                )
-
-            else:
-                st.info(
-                    "No stop coordinates available."
-                )
-
-        except Exception as error:
-            st.warning(
-                "Problem stops map could not be displayed."
-            )
-
-            with st.expander(
-                "Technical details"
-            ):
-                st.code(
-                    str(error)
-                )
-
-    else:
-        st.info(
-            "No problem-stop analytics available."
-        )
-
-
-# ------------------------------------------------------------
-# PROBLEM STOP DATA TABLE — RESTORED
-# ------------------------------------------------------------
-
-if problem_stops:
-    with st.expander(
-        "View problem stop data"
-    ):
-        stop_table = []
-
-        for row in problem_stops[:20]:
-            stop_table.append(
-                {
-                    "Stop":
-                        row.get(
-                            "stop_name"
-                        ),
-
-                    "Observations":
-                        int(
-                            row.get(
-                                "observations",
-                                0,
-                            )
-                            or 0
-                        ),
-
-                    "Delay Observations":
-                        int(
-                            row.get(
-                                "delay_observations",
-                                0,
-                            )
-                            or 0
-                        ),
-
-                    "Average Delay (min)":
-                        round(
-                            float(
-                                row.get(
-                                    "average_delay_minutes",
-                                    0,
-                                )
-                                or 0
-                            ),
-                            2,
-                        ),
-
-                    "Maximum Delay (min)":
-                        round(
-                            float(
-                                row.get(
-                                    "maximum_delay_minutes",
-                                    0,
-                                )
-                                or 0
-                            ),
-                            2,
-                        ),
-
-                    "Delayed %":
-                        round(
-                            float(
-                                row.get(
-                                    "delayed_percentage",
-                                    0,
-                                )
-                                or 0
-                            ),
-                            2,
-                        ),
-                }
-            )
-
-        st.dataframe(
-            stop_table,
-            width="stretch",
-            hide_index=True,
-        )
 
 
 # ============================================================
