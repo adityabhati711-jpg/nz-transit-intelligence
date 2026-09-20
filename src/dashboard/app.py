@@ -304,28 +304,42 @@ st.html(
         margin-top: .12rem;
     }}
 
-    /* Always-visible proxy menu button iframe.
-       It stays beside the bus logo even after the sidebar is collapsed. */
-    div[data-testid="stIFrame"] {{
+    /* Stable always-visible menu toggle beside the bus logo. */
+    .st-key-sidebar_toggle_container {{
         position: fixed !important;
         top: 17px !important;
         left: 14px !important;
-        z-index: 1000010 !important;
+        z-index: 1000015 !important;
+
         width: 42px !important;
         min-width: 42px !important;
+        max-width: 42px !important;
+
         height: 42px !important;
         min-height: 42px !important;
+        max-height: 42px !important;
+
         margin: 0 !important;
         padding: 0 !important;
-        border: none !important;
         overflow: visible !important;
     }}
 
-    div[data-testid="stIFrame"] iframe {{
+    .st-key-sidebar_toggle_container > div,
+    .st-key-sidebar_toggle_container [data-testid="stIFrame"],
+    .st-key-sidebar_toggle_container iframe {{
         width: 42px !important;
+        min-width: 42px !important;
+        max-width: 42px !important;
+
         height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
         border: 0 !important;
         background: transparent !important;
+        overflow: visible !important;
     }}
 
     /* Hide Streamlit's own hover-only collapse icon.
@@ -498,18 +512,29 @@ st.html(
             font-size: .64rem;
         }}
 
-        div[data-testid="stIFrame"] {{
+        .st-key-sidebar_toggle_container {{
             top: 15px !important;
             left: 10px !important;
+
             width: 38px !important;
             min-width: 38px !important;
+            max-width: 38px !important;
+
             height: 38px !important;
             min-height: 38px !important;
+            max-height: 38px !important;
         }}
 
-        div[data-testid="stIFrame"] iframe {{
+        .st-key-sidebar_toggle_container > div,
+        .st-key-sidebar_toggle_container [data-testid="stIFrame"],
+        .st-key-sidebar_toggle_container iframe {{
             width: 38px !important;
+            min-width: 38px !important;
+            max-width: 38px !important;
+
             height: 38px !important;
+            min-height: 38px !important;
+            max-height: 38px !important;
         }}
 
         .st-key-dashboard_nav {{
@@ -1197,12 +1222,16 @@ st.html(
 
     @media (max-width: 760px) {{
         .premium-topbar {{
-            min-height: 70px;
-            padding: .65rem .8rem;
+            height: 118px;
+            min-height: 118px;
+            align-items: flex-start;
+            padding:
+                .72rem .7rem
+                3.35rem 4.25rem;
         }}
 
         .premium-brand-title {{
-            font-size: 1rem;
+            font-size: .98rem;
         }}
 
         .premium-brand-sub {{
@@ -1214,7 +1243,7 @@ st.html(
         }}
 
         .block-container {{
-            padding-top: 4rem;
+            padding-top: 8.6rem;
             padding-left: .8rem;
             padding-right: .8rem;
         }}
@@ -2343,188 +2372,266 @@ if nav_choice is None:
 # ALWAYS-VISIBLE SIDEBAR TOGGLE
 # ============================================================
 
-components.html(
-    """
-    <!doctype html>
-    <html>
-    <head>
-        <style>
-            html,
-            body {
-                margin: 0;
-                padding: 0;
-                width: 42px;
-                height: 42px;
-                overflow: hidden;
-                background: transparent;
-            }
-
-            #sidebar-toggle {
-                width: 42px;
-                height: 42px;
-
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                padding: 0;
-
-                border: 1px solid rgba(255,255,255,.18);
-                border-radius: 11px;
-
-                background:
-                    linear-gradient(
-                        145deg,
-                        #183b63,
-                        #102b4d
-                    );
-
-                color: #ffffff;
-
-                font-family:
-                    Arial,
-                    sans-serif;
-
-                font-size: 21px;
-                font-weight: 900;
-                letter-spacing: -5px;
-                line-height: 1;
-
-                cursor: pointer;
-
-                box-shadow:
-                    0 7px 18px rgba(3,12,24,.28);
-            }
-
-            #sidebar-toggle:hover {
-                background:
-                    linear-gradient(
-                        145deg,
-                        #215184,
-                        #15375e
-                    );
-            }
-
-            @media (max-width: 760px) {
+with st.container(key="sidebar_toggle_container"):
+    components.html(
+        """
+        <!doctype html>
+        <html>
+        <head>
+            <style>
                 html,
-                body,
-                #sidebar-toggle {
-                    width: 38px;
-                    height: 38px;
+                body {
+                    margin: 0;
+                    padding: 0;
+                    width: 42px;
+                    height: 42px;
+                    overflow: hidden;
+                    background: transparent;
                 }
-
+    
                 #sidebar-toggle {
-                    font-size: 19px;
+                    width: 42px;
+                    height: 42px;
+    
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+    
+                    padding: 0;
+    
+                    border: 1px solid rgba(255,255,255,.18);
+                    border-radius: 11px;
+    
+                    background:
+                        linear-gradient(
+                            145deg,
+                            #183b63,
+                            #102b4d
+                        );
+    
+                    color: #ffffff;
+    
+                    font-family:
+                        Arial,
+                        sans-serif;
+    
+                    font-size: 21px;
+                    font-weight: 900;
+                    letter-spacing: -5px;
+                    line-height: 1;
+    
+                    cursor: pointer;
+    
+                    box-shadow:
+                        0 7px 18px rgba(3,12,24,.28);
                 }
-            }
-        </style>
-    </head>
-
-    <body>
-        <button
-            id="sidebar-toggle"
-            type="button"
-            title="Open or close prediction menu"
-            aria-label="Open or close prediction menu"
-        >
-            ❮❮
-        </button>
-
-        <script>
-        (() => {
-            const parentDoc = window.parent.document;
-            const button =
-                document.getElementById(
-                    "sidebar-toggle"
-                );
-
-            function getSidebar() {
-                return parentDoc.querySelector(
-                    '[data-testid="stSidebar"]'
-                );
-            }
-
-            function getNativeToggle() {
-                const wrapper =
-                    parentDoc.querySelector(
-                        '[data-testid="stSidebarCollapseButton"]'
+    
+                #sidebar-toggle:hover {
+                    background:
+                        linear-gradient(
+                            145deg,
+                            #215184,
+                            #15375e
+                        );
+                }
+    
+                @media (max-width: 760px) {
+                    html,
+                    body,
+                    #sidebar-toggle {
+                        width: 38px;
+                        height: 38px;
+                    }
+    
+                    #sidebar-toggle {
+                        font-size: 19px;
+                    }
+                }
+            </style>
+        </head>
+    
+        <body>
+            <button
+                id="sidebar-toggle"
+                type="button"
+                title="Open or close prediction menu"
+                aria-label="Open or close prediction menu"
+            >
+                ❮❮
+            </button>
+    
+            <script>
+            (() => {
+                const parentWindow = window.parent;
+                const parentDoc = parentWindow.document;
+                const button =
+                    document.getElementById(
+                        "sidebar-toggle"
                     );
+    
+                function getSidebar() {
+                    return parentDoc.querySelector(
+                        '[data-testid="stSidebar"]'
+                    );
+                }
+    
+                function getNativeToggle() {
+                    const selectors = [
+                        '[data-testid="stSidebarCollapseButton"] button',
+                        '[data-testid="stSidebarCollapseButton"]',
+                        '[data-testid="stSidebarCollapsedControl"] button',
+                        '[data-testid="stSidebarCollapsedControl"]',
+                        '[data-testid="collapsedControl"] button',
+                        '[data-testid="collapsedControl"]',
+                        'button[aria-label="Open sidebar"]',
+                        'button[aria-label="Close sidebar"]',
+                        'button[title="Open sidebar"]',
+                        'button[title="Close sidebar"]'
+                    ];
 
-                if (!wrapper) {
+                    for (const selector of selectors) {
+                        const element =
+                            parentDoc.querySelector(
+                                selector
+                            );
+
+                        if (element) {
+                            return element;
+                        }
+                    }
+
                     return null;
                 }
 
-                return (
-                    wrapper.querySelector("button")
-                    || wrapper
-                );
-            }
+                function sidebarIsOpen() {
+                    const sidebar =
+                        getSidebar();
 
-            function updateArrow() {
-                const sidebar =
-                    getSidebar();
-
-                const expanded =
-                    sidebar
-                    && sidebar.getAttribute(
-                        "aria-expanded"
-                    ) === "true";
-
-                button.textContent =
-                    expanded
-                    ? "❮❮"
-                    : "❯❯";
-
-                button.title =
-                    expanded
-                    ? "Close prediction menu"
-                    : "Open prediction menu";
-            }
-
-            button.addEventListener(
-                "click",
-                () => {
-                    const nativeToggle =
-                        getNativeToggle();
-
-                    if (nativeToggle) {
-                        nativeToggle.click();
-
-                        setTimeout(
-                            updateArrow,
-                            120
-                        );
+                    if (!sidebar) {
+                        return false;
                     }
+
+                    const ariaExpanded =
+                        sidebar.getAttribute(
+                            "aria-expanded"
+                        );
+
+                    if (ariaExpanded !== null) {
+                        return ariaExpanded === "true";
+                    }
+
+                    const rect =
+                        sidebar.getBoundingClientRect();
+
+                    return (
+                        rect.width > 80
+                        && rect.right > 20
+                    );
                 }
-            );
 
-            updateArrow();
+                function updateArrow() {
+                    const expanded =
+                        sidebarIsOpen();
 
-            const observer =
-                new MutationObserver(
-                    updateArrow
+                    button.textContent =
+                        expanded
+                        ? "❮❮"
+                        : "❯❯";
+
+                    button.title =
+                        expanded
+                        ? "Close prediction menu"
+                        : "Open prediction menu";
+                }
+
+                function openSidebarOnFirstMobileVisit() {
+                    if (
+                        parentWindow.innerWidth > 760
+                    ) {
+                        return;
+                    }
+
+                    const storageKey =
+                        "nz_transit_mobile_sidebar_initialized_v2";
+
+                    if (
+                        parentWindow.sessionStorage.getItem(
+                            storageKey
+                        ) === "1"
+                    ) {
+                        return;
+                    }
+
+                    parentWindow.sessionStorage.setItem(
+                        storageKey,
+                        "1"
+                    );
+
+                    setTimeout(
+                        () => {
+                            if (!sidebarIsOpen()) {
+                                const nativeToggle =
+                                    getNativeToggle();
+
+                                if (nativeToggle) {
+                                    nativeToggle.click();
+
+                                    setTimeout(
+                                        updateArrow,
+                                        180
+                                    );
+                                }
+                            }
+                        },
+                        650
+                    );
+                }
+
+                button.addEventListener(
+                    "click",
+                    () => {
+                        const nativeToggle =
+                            getNativeToggle();
+    
+                        if (nativeToggle) {
+                            nativeToggle.click();
+    
+                            setTimeout(
+                                updateArrow,
+                                120
+                            );
+                        }
+                    }
                 );
-
-            observer.observe(
-                parentDoc.body,
-                {
-                    attributes: true,
-                    childList: true,
-                    subtree: true,
-                    attributeFilter: [
-                        "aria-expanded"
-                    ]
-                }
-            );
-        })();
-        </script>
-    </body>
-    </html>
-    """,
-    width=42,
-    height=42,
-    scrolling=False,
-)
+    
+                updateArrow();
+                openSidebarOnFirstMobileVisit();
+    
+                const observer =
+                    new MutationObserver(
+                        updateArrow
+                    );
+    
+                observer.observe(
+                    parentDoc.body,
+                    {
+                        attributes: true,
+                        childList: true,
+                        subtree: true,
+                        attributeFilter: [
+                            "aria-expanded"
+                        ]
+                    }
+                );
+            })();
+            </script>
+        </body>
+        </html>
+        """,
+        width=42,
+        height=42,
+        scrolling=False,
+    )
 
 
 # ============================================================
