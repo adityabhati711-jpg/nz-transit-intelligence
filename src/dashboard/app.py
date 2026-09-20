@@ -1221,6 +1221,12 @@ st.html(
     }}
 
     @media (max-width: 760px) {{
+        /* Mobile only: when the sidebar is open it must sit ABOVE
+           the navbar/header, so the nav never overlays the menu. */
+        [data-testid="stSidebar"] {{
+            z-index: 1000014 !important;
+        }}
+
         .premium-topbar {{
             height: 118px;
             min-height: 118px;
